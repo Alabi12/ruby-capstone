@@ -11,7 +11,8 @@ class Item
   end
 
   def can_be_archived?
-    (DateTime.now.year - @published_date) > 10
+    date = Date.strptime(@published_date, '%d/%m/%Y')
+    (Time.now.year - date.year) > 10
   end
 
   def move_to_archive
