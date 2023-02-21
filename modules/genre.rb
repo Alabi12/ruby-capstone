@@ -10,6 +10,6 @@ class Genre
 
   def add_item(item)
     @items << item unless @items.include?(self)
-    @item.genre = self
+    item.genre = self
   end
 end
