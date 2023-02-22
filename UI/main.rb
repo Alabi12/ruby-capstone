@@ -6,19 +6,29 @@ require_relative '../modules/label'
 require_relative '../modules/music_album'
 require_relative './split'
 require_relative '../handlers/book_handler'
+require_relative '../handlers/music_album_handler'
+require_relative '../handlers/game_handler'
+require_relative '../handlers/author_handler'
+require_relative '../handlers/label_handler'
+require_relative '../handlers/genre_handler'
 
 
 class Main
   include Split
   include Book_Handler
+  include Music_Album_Handler
+  include Game_Handler
+  include Author_Handler
+  include Label_Handler
+  include Genre_Handler
   def initialize
     super
     @books = fetch_books
-    @music_albums = []
-    @games = []
-    @genres = []
-    @labels = []
-    @authors = []
+    @music_albums = fetch_music_album
+    @games = fetch_game
+    @genres = fetch_genre
+    @labels = fetch_label
+    @authors = fetch_author
   end
 
   COLOR_CODES = {
@@ -100,6 +110,11 @@ class Main
 
   def save_data
     save_books(@books)
+    save_music_album(@music_albums)
+    save_game(@games)
+    save_author(@authors)
+    save_label(@labels)
+    save_genre(@genres)
   end
 
   private
