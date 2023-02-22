@@ -5,12 +5,15 @@ require_relative '../modules/genre'
 require_relative '../modules/label'
 require_relative '../modules/music_album'
 require_relative './split'
+require_relative '../handlers/book_handler'
+
 
 class Main
   include Split
+  include Book_Handler
   def initialize
     super
-    @books = []
+    @books = fetch_books
     @music_albums = []
     @games = []
     @genres = []
@@ -83,6 +86,7 @@ class Main
 
       operation(input)
     end
+    save_books(@books)
   end
 
   private
