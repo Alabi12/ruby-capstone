@@ -15,12 +15,12 @@ require_relative '../handlers/genre_handler'
 
 class Main
   include Split
-  include Book_Handler
-  include Music_Album_Handler
-  include Game_Handler
-  include Author_Handler
-  include Label_Handler
-  include Genre_Handler
+  include BookHandler
+  include MusicAlbumHandler
+  include GameHandler
+  include AuthorHandler
+  include LabelHandler
+  include GenreHandler
   def initialize
     super
     @books = fetch_books
