@@ -6,30 +6,28 @@ require_relative '../modules/label'
 require_relative '../modules/music_album'
 require_relative './split'
 require_relative '../handlers/book_handler'
-require_relative '../handlers/music_album_handler'
-require_relative '../handlers/game_handler'
-require_relative '../handlers/author_handler'
-require_relative '../handlers/label_handler'
-require_relative '../handlers/genre_handler'
 
 
 class Main
   include Split
   include Book_Handler
-  include Music_Album_Handler
-  include Game_Handler
-  include Author_Handler
-  include Label_Handler
-  include Genre_Handler
   def initialize
     super
     @books = fetch_books
-    @music_albums = fetch_music_album
-    @games = fetch_game
-    @genres = fetch_genre
-    @labels = fetch_label
-    @authors = fetch_author
+    @music_albums = []
+    @games = []
+    @genres = []
+    @labels = []
+    @authors = []
   end
+
+  COLOR_CODES = {
+    red: "\e[31m",
+    green: "\e[32m",
+    yellow: "\e[33m",
+    blue: "\e[34m",
+    reset: "\e[0m"
+  }.freeze
 
   def user_input(text)
     print text
@@ -102,24 +100,27 @@ class Main
 
   def save_data
     save_books(@books)
-    save_music_album(@music_albums)
-    save_game(@games)
-    save_author(@authors)
-    save_label(@labels)
-    save_genre(@genres)
   end
 
   private
 
   def list_all_books
-    @books.each do |book|
-      puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+    if @books.empty?
+      puts "#{COLOR_CODES[:red]}\nNo books found.#{COLOR_CODES[:reset]}"
+    else
+      @books.each do |book|
+        puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+      end
     end
   end
 
   def list_all_music_albums
-    @music_albums.each do |album|
-      puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+    if @music_albums.empty?
+      puts "#{COLOR_CODES[:red]}\nNo album found.#{COLOR_CODES[:reset]}"
+    else
+      @music_albums.each do |album|
+        puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+      end
     end
   end
 
@@ -134,10 +135,14 @@ class Main
   end
 
   def list_all_games
-    @games.each do |game|
-      puts "published date: #{game.published_date}, " \
-           "multiplayer: #{game.multiplayer}, " \
-           "last played at: #{game.last_played_at}"
+    if @games.empty?
+      puts "#{COLOR_CODES[:red]}\nNo games found.#{COLOR_CODES[:reset]}"
+    else
+      @games.each do |game|
+        puts "published date: #{game.published_date}, " \
+             "multiplayer: #{game.multiplayer}, " \
+             "last played at: #{game.last_played_at}"
+      end
     end
   end
 
