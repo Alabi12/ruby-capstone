@@ -7,7 +7,6 @@ require_relative '../modules/music_album'
 require_relative './split'
 require_relative '../handlers/book_handler'
 
-
 class Main
   include Split
   include Book_Handler
@@ -20,6 +19,14 @@ class Main
     @labels = []
     @authors = []
   end
+
+  COLOR_CODES = {
+    red: "\e[31m",
+    green: "\e[32m",
+    yellow: "\e[33m",
+    blue: "\e[34m",
+    reset: "\e[0m"
+  }.freeze
 
   def user_input(text)
     print text
@@ -92,8 +99,12 @@ class Main
   private
 
   def list_all_books
-    @books.each do |book|
-      puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+    if @books.empty?
+      puts "#{COLOR_CODES[:red]}\nNo books found.#{COLOR_CODES[:reset]}"
+    else
+      @books.each do |book|
+        puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+      end
     end
   end
 
