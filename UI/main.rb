@@ -7,6 +7,7 @@ require_relative '../modules/music_album'
 
 class Main
   def initialize
+    super
     @books = []
     @music_albums = []
     @games = []
@@ -50,16 +51,16 @@ class Main
     puts 'Choose an Option'
     loop do
       puts '
-                1- List all books
-                2- List all music albums
-                3- List of games
-                4- List all genres
-                5- List all labels
-                6- List all authors
-                7- Add a book
-                8- Add a music album
-                9- Add a game
-                10- Quit '
+        1- List all books
+        2- List all music albums
+        3- List of games
+        4- List all genres
+        5- List all labels
+        6- List all authors
+        7- Add a book
+        8- Add a music album
+        9- Add a game
+        10- Quit '
 
       input = user_input('Choose an option: ').to_i
 
@@ -76,10 +77,17 @@ class Main
   end
 
   def add_book
+    print 'title:'
+    title = gets.chomp
+    print 'Author first name:'
+    first_name = gets.chomp
+    print 'Author last name:'
+    last_name = gets.chomp
     publish_date = user_input('published_date [DD/MM/YYYY]: ')
     publisher = user_input('publisher: ')
     cover_state = user_input('cover_state [good/bad]: ')
-    @books << Book.new(publish_date, publisher, cover_state)
+    @books << Book.new(title, publish_date, publisher, cover_state)
+    @authors << Author.new(first_name, last_name)
     puts 'Book Added Succesfully'
   end
 
@@ -90,9 +98,16 @@ class Main
   end
 
   def add_music_album
-    publish_date = user_input('published_date [DD/MM/YYYY]: ')
+    print 'Enter title:'
+    title = gets.chomp
+    print 'Enter color:'
+    color = gets.chomp
+    print 'publish_date [DD/MM/YYYY]:'
+    published_date = gets.chomp.to_s
+    @labels << Label.new(title, color)
     spotify = on_spotify
-    @music_albums << Music.new(publish_date, spotify)
+    @music_albums << Music.new(title, published_date, spotify)
+    puts 'Music album and label created'
   end
 
   def on_spotify
