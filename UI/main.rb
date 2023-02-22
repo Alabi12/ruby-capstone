@@ -6,15 +6,20 @@ require_relative '../modules/label'
 require_relative '../modules/music_album'
 require_relative './split'
 require_relative '../handlers/book_handler'
+require_relative '../handlers/music_handler'
+require_relative '../handlers/game_handler'
 
 class Main
   include Split
   include Book_Handler
+  include Music_Handler
+  include Game_Handler
+
   def initialize
     super
     @books = fetch_books
-    @music_albums = []
-    @games = []
+    @music_albums = fetch_albums
+    @games = fetch_games
     @genres = []
     @labels = []
     @authors = []
@@ -94,6 +99,8 @@ class Main
       operation(input)
     end
     save_books(@books)
+    save_albums(@music_albums)
+    save_games(@games)
   end
 
   private
@@ -109,8 +116,12 @@ class Main
   end
 
   def list_all_music_albums
-    @music_albums.each do |album|
-      puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+    if @music_albums.empty?
+      puts "#{COLOR_CODES[:red]}\nNo album found.#{COLOR_CODES[:reset]}"
+    else
+      @music_albums.each do |album|
+        puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+      end
     end
   end
 
@@ -125,10 +136,14 @@ class Main
   end
 
   def list_all_games
-    @games.each do |game|
-      puts "published date: #{game.published_date}, " \
-           "multiplayer: #{game.multiplayer}, " \
-           "last played at: #{game.last_played_at}"
+    if @games.empty?
+      puts "#{COLOR_CODES[:red]}\nNo games found.#{COLOR_CODES[:reset]}"
+    else
+      @games.each do |game|
+        puts "published date: #{game.published_date}, " \
+             "multiplayer: #{game.multiplayer}, " \
+             "last played at: #{game.last_played_at}"
+      end
     end
   end
 
