@@ -12,7 +12,6 @@ require_relative '../handlers/author_handler'
 require_relative '../handlers/label_handler'
 require_relative '../handlers/genre_handler'
 
-
 class Main
   include Split
   include BookHandler
