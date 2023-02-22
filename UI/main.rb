@@ -4,8 +4,10 @@ require_relative '../modules/game'
 require_relative '../modules/genre'
 require_relative '../modules/label'
 require_relative '../modules/music_album'
+require_relative './split'
 
 class Main
+  include Split
   def initialize
     super
     @books = []
@@ -23,11 +25,21 @@ class Main
 
   def operation(input)
     case input
+    when 1..6
+      list_all(input)
+    when 7..9
+      add_media(input - 6)
+    else
+      puts 'Please choose a valid option number'
+    end
+  end
+
+  def list_all(input)
+    case input
     when 1
       list_all_books
     when 2
       list_all_music_albums
-
     when 3
       list_all_games
     when 4
@@ -36,14 +48,17 @@ class Main
       list_all_labels
     when 6
       list_all_authors
-    when 7
+    end
+  end
+
+  def add_media(input)
+    case input
+    when 1
       add_book
-    when 8
+    when 2
       add_music_album
-    when 9
+    when 3
       add_game
-    else
-      puts 'Please choose a valid option number'
     end
   end
 
@@ -70,35 +85,12 @@ class Main
     end
   end
 
+  private
+
   def list_all_books
     @books.each do |book|
       puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
     end
-  end
-
-  def add_book
-    title = user_input('Enter Book Title: ')
-    color = user_input('Enter Book Color: ')
-    label = Label.new(title, color)
-    genre_name = user_input('Enter Book Genre: ')
-    genre = Genre.new(genre_name)
-    author_firstname = user_input('Enter Author First Name: ')
-    author_lastname = user_input('Enter Author Last Name: ')
-    author = Author.new(author_firstname, author_lastname)
-    publish_date = user_input('published_date [DD/MM/YYYY]: ')
-    publisher = user_input('publisher: ')
-    cover_state = user_input('cover_state [good/bad]: ')
-    newbook = Book.new(publish_date, publisher, cover_state)
-    newbook.label = label
-    newbook.genre = genre
-    newbook.author = author
-
-    @books << newbook
-    @genres << genre
-    @labels << label
-    @authors << author
-
-    puts 'Book Added Succesfully'
   end
 
   def list_all_music_albums
@@ -107,33 +99,8 @@ class Main
     end
   end
 
-  def add_music_album
-    title = user_input('Enter Album Title: ')
-    color = user_input('Enter Album Color: ')
-    label = Label.new(title, color)
-    genre_name = user_input('Enter Album Genre: ')
-    genre = Genre.new(genre_name)
-    author_firstname = user_input('Enter Author First Name: ')
-    author_lastname = user_input('Enter Author Last Name: ')
-    author = Author.new(author_firstname, author_lastname)
-    publish_date = user_input('published_date [DD/MM/YYYY]: ')
-    spotify = on_spotify
-    newmusic = Music.new(publish_date, spotify)
-    newmusic.label = label
-    newmusic.genre = genre
-    newmusic.author = author
-
-    @music_albums << newmusic
-    @genres << genre
-    @labels << label
-    @authors << author
-
-    puts 'Music album and label created'
-  end
-
   def on_spotify
-    puts 'on spotify? [Y/N]:'
-    permit = gets.chomp
+    permit = user_input('on spotify? [Y/N]:')
     case permit
     when 'Y', 'y'
       true
@@ -144,32 +111,10 @@ class Main
 
   def list_all_games
     @games.each do |game|
-      puts "published date: #{game.published_date}, multiplayer: #{game.multiplayer}, last played at: #{game.last_played_at}"
+      puts "published date: #{game.published_date}, " \
+           "multiplayer: #{game.multiplayer}, " \
+           "last played at: #{game.last_played_at}"
     end
-  end
-
-  def add_game
-    title = user_input('Enter Game Title: ')
-    color = user_input('Enter Game Color: ')
-    label = Label.new(title, color)
-    genre_name = user_input('Enter Game Genre: ')
-    genre = Genre.new(genre_name)
-    author_firstname = user_input('Enter Author First Name: ')
-    author_lastname = user_input('Enter Author Last Name: ')
-    author = Author.new(author_firstname, author_lastname)
-    publish_date = user_input('Published_date [DD/MM/YYYY]: ')
-    multiplayer = user_input('Multiplayer: ')
-    lastplayed = user_input('Last played at [DD/MM/YYYY]: ')
-    newgame = Game.new(publish_date, multiplayer, lastplayed)
-
-    newgame.label = label
-    newgame.genre = genre
-    newgame.author = author
-
-    @games << newgame
-    @genres << genre
-    @labels << label
-    @authors << author
   end
 
   def list_all_genres
