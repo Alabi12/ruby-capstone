@@ -8,21 +8,27 @@ require_relative './split'
 require_relative '../handlers/book_handler'
 require_relative '../handlers/music_album_handler'
 require_relative '../handlers/game_handler'
+require_relative '../handlers/author_handler'
+require_relative '../handlers/genre_handler'
+require_relative '../handlers/label_handler'
 
 class Main
   include Split
   include Book_Handler
   include Music_Handler
   include Game_Handler
+  include Author_Handler
+  include Genre_Handler
+  include Label_Handler
 
   def initialize
     super
     @books = fetch_books
     @music_albums = fetch_albums
     @games = fetch_games
-    @genres = []
-    @labels = []
-    @authors = []
+    @genres = fetch_genres
+    @labels = fetch_labels
+    @authors = fetch_authors
   end
 
   COLOR_CODES = {
@@ -78,29 +84,37 @@ class Main
   end
 
   def run
-    puts 'Choose an Option'
     loop do
-      puts '
-        1- List all books
-        2- List all music albums
-        3- List of games
-        4- List all genres
-        5- List all labels
-        6- List all authors
-        7- Add a book
-        8- Add a music album
-        9- Add a game
-        10- Quit '
-
+      display_menu
       input = user_input('Choose an option: ').to_i
-
       break if input == 10
 
       operation(input)
     end
+    save_data
+  end
+
+  def display_menu
+    puts 'Choose an Option'
+    puts '1- List all books'
+    puts '2- List all music albums'
+    puts '3- List of games'
+    puts '4- List all genres'
+    puts '5- List all labels'
+    puts '6- List all authors'
+    puts '7- Add a book'
+    puts '8- Add a music album'
+    puts '9- Add a game'
+    puts '10- Quit'
+  end
+
+  def save_data
     save_books(@books)
-    save_albums(@music_albums)
-    save_games(@games)
+    save_music_album(@music_albums)
+    save_game(@games)
+    save_author(@authors)
+    save_label(@labels)
+    save_genre(@genres)
   end
 
   private
