@@ -28,7 +28,7 @@ module Split
     @labels << label
     @authors << author
 
-    puts 'Book Added Succesfully'
+    puts "\nBook Added Successfully"
   end
 
   def add_music_album
@@ -52,7 +52,7 @@ module Split
     @labels << label
     @authors << author
 
-    puts 'Music album and label created'
+    puts "\nMusic Album Created Successfully"
   end
 
   def add_game
@@ -77,5 +77,7 @@ module Split
     @genres << genre
     @labels << label
     @authors << author
+
+    puts "\nGame Created Successfully"
   end
 end

@@ -95,7 +95,7 @@ class Main
   end
 
   def display_menu
-    puts 'Choose an Option'
+    puts "\nChoose an Option by entering a number: "
     puts '1- List all books'
     puts '2- List all music albums'
     puts '3- List of games'
