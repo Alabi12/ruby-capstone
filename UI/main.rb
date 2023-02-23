@@ -110,8 +110,8 @@ class Main
 
   def save_data
     save_books(@books)
-    save_music_album(@music_albums)
-    save_game(@games)
+    save_albums(@music_albums)
+    save_games(@games)
     save_author(@authors)
     save_label(@labels)
     save_genre(@genres)
