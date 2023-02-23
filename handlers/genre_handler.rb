@@ -1,29 +1,29 @@
 require 'json'
 
-module GenreHandler
-  def save_genre(genres)
-    arr = []
-    path = '../storage/genre.json'
+module Genre_Handler
+    def save_genre(genres)
+        arr = []
+        path = '../storage/genre.json'
 
-    return unless File.exist?(path)
+        return unless File.exist?(path)
 
-    genres.map do |e|
-      arr << { name: e.name }
+        genres.map do |gen|
+            arr << {name: gen.name}
+        end
+
+        File.write(path, JSON.pretty_generate(arr))
     end
 
-    File.write(path, JSON.generate(arr))
-  end
+    def fetch_genres
+        data = []
+        path = '../storage/genre.json'
 
-  def fetch_genre
-    path = '../storage/genre.json'
+        return data if File.zero?(path)
 
-    return [] unless File.exist?(path)
+        JSON.parse(File.read(path)).each do |genre|
+            data << Genre.new(genre['name'])
+        end
 
-    json_data = File.read(path)
-    parsed_data = JSON.parse(json_data)
-
-    parsed_data.map do |genre|
-      Genre.new(genre['name'])
+        data
     end
-  end
 end
