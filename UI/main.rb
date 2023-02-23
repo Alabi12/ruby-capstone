@@ -5,18 +5,39 @@ require_relative '../modules/genre'
 require_relative '../modules/label'
 require_relative '../modules/music_album'
 require_relative './split'
+require_relative '../handlers/book_handler'
+require_relative '../handlers/music_album_handler'
+require_relative '../handlers/game_handler'
+require_relative '../handlers/author_handler'
+require_relative '../handlers/genre_handler'
+require_relative '../handlers/label_handler'
 
 class Main
   include Split
+  include BookHandler
+  include MusicHandler
+  include GameHandler
+  include AuthorHandler
+  include GenreHandler
+  include LabelHandler
+
   def initialize
     super
-    @books = []
-    @music_albums = []
-    @games = []
-    @genres = []
-    @labels = []
-    @authors = []
+    @books = fetch_books
+    @music_albums = fetch_albums
+    @games = fetch_games
+    @genres = fetch_genres
+    @labels = fetch_labels
+    @authors = fetch_authors
   end
+
+  COLOR_CODES = {
+    red: "\e[31m",
+    green: "\e[32m",
+    yellow: "\e[33m",
+    blue: "\e[34m",
+    reset: "\e[0m"
+  }.freeze
 
   def user_input(text)
     print text
@@ -63,39 +84,58 @@ class Main
   end
 
   def run
-    puts 'Choose an Option'
     loop do
-      puts '
-        1- List all books
-        2- List all music albums
-        3- List of games
-        4- List all genres
-        5- List all labels
-        6- List all authors
-        7- Add a book
-        8- Add a music album
-        9- Add a game
-        10- Quit '
-
+      display_menu
       input = user_input('Choose an option: ').to_i
-
       break if input == 10
 
       operation(input)
     end
+    save_data
+  end
+
+  def display_menu
+    puts 'Choose an Option'
+    puts '1- List all books'
+    puts '2- List all music albums'
+    puts '3- List of games'
+    puts '4- List all genres'
+    puts '5- List all labels'
+    puts '6- List all authors'
+    puts '7- Add a book'
+    puts '8- Add a music album'
+    puts '9- Add a game'
+    puts '10- Quit'
+  end
+
+  def save_data
+    save_books(@books)
+    save_music_album(@music_albums)
+    save_game(@games)
+    save_author(@authors)
+    save_label(@labels)
+    save_genre(@genres)
   end
 
   private
 
   def list_all_books
-    @books.each do |book|
-      puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+    if @books.empty?
+      puts "#{COLOR_CODES[:red]}\nNo books found.#{COLOR_CODES[:reset]}"
+    else
+      @books.each do |book|
+        puts "date: #{book.published_date}, publisher: #{book.publisher}, cover_state: #{book.cover_state}"
+      end
     end
   end
 
   def list_all_music_albums
-    @music_albums.each do |album|
-      puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+    if @music_albums.empty?
+      puts "#{COLOR_CODES[:red]}\nNo album found.#{COLOR_CODES[:reset]}"
+    else
+      @music_albums.each do |album|
+        puts "published date: #{album.published_date}, on spotify: #{album.on_spotify}"
+      end
     end
   end
 
@@ -110,10 +150,14 @@ class Main
   end
 
   def list_all_games
-    @games.each do |game|
-      puts "published date: #{game.published_date}, " \
-           "multiplayer: #{game.multiplayer}, " \
-           "last played at: #{game.last_played_at}"
+    if @games.empty?
+      puts "#{COLOR_CODES[:red]}\nNo games found.#{COLOR_CODES[:reset]}"
+    else
+      @games.each do |game|
+        puts "published date: #{game.published_date}, " \
+             "multiplayer: #{game.multiplayer}, " \
+             "last played at: #{game.last_played_at}"
+      end
     end
   end
 
