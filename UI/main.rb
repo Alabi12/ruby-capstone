@@ -14,12 +14,12 @@ require_relative '../handlers/label_handler'
 
 class Main
   include Split
-  include Book_Handler
-  include Music_Handler
-  include Game_Handler
-  include Author_Handler
-  include Genre_Handler
-  include Label_Handler
+  include BookHandler
+  include MusicHandler
+  include GameHandler
+  include AuthorHandler
+  include GenreHandler
+  include LabelHandler
 
   def initialize
     super

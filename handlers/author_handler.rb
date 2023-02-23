@@ -1,29 +1,29 @@
 require 'json'
 
-module Author_Handler
-    def save_author(authors)
-        arr = []
-        path = '../storage/author.json'
+module AuthorHandler
+  def save_author(authors)
+    arr = []
+    path = '../storage/author.json'
 
-        return unless File.exist?(path)
+    return unless File.exist?(path)
 
-        authors.map do |author|
-            arr << {first_name: author.first_name, last_name: author.last_name}
-        end
-
-        File.write(path, JSON.pretty_generate(arr))
+    authors.map do |author|
+      arr << { first_name: author.first_name, last_name: author.last_name }
     end
 
-    def fetch_authors
-        data = []
-        path = '../storage/author.json'
+    File.write(path, JSON.pretty_generate(arr))
+  end
 
-        return data if File.zero?(path)
+  def fetch_authors
+    data = []
+    path = '../storage/author.json'
 
-        JSON.parse(File.read(path)).each do |author|
-            data << Author.new(author['first_name'], author['last_name'])
-        end
+    return data if File.zero?(path)
 
-        data
+    JSON.parse(File.read(path)).each do |author|
+      data << Author.new(author['first_name'], author['last_name'])
     end
+
+    data
+  end
 end

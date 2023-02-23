@@ -1,29 +1,29 @@
 require 'json'
 
-module Label_Handler
-    def save_label(labels)
-        arr = []
-        path = '../storage/label.json'
+module LabelHandler
+  def save_label(labels)
+    arr = []
+    path = '../storage/label.json'
 
-        return unless File.exist?(path)
+    return unless File.exist?(path)
 
-        labels.map do |label|
-            arr << {title: label.title, color: label.color}
-        end
-
-        File.write(path, JSON.pretty_generate(arr))
+    labels.map do |label|
+      arr << { title: label.title, color: label.color }
     end
 
-    def fetch_labels
-        data = []
-        path = '../storage/label.json'
+    File.write(path, JSON.pretty_generate(arr))
+  end
 
-        return data if File.zero?(path)
+  def fetch_labels
+    data = []
+    path = '../storage/label.json'
 
-        JSON.parse(File.read(path)).each do |label|
-            data << Label.new(label['title'], label['color'])
-        end
+    return data if File.zero?(path)
 
-        data
+    JSON.parse(File.read(path)).each do |label|
+      data << Label.new(label['title'], label['color'])
     end
+
+    data
+  end
 end

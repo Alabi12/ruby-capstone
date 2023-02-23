@@ -1,29 +1,29 @@
 require 'json'
 
-module Music_Handler
-    def save_albums(albums)
-        arr = []
-        path = '../storage/music_album.json'
+module MusicHandler
+  def save_albums(albums)
+    arr = []
+    path = '../storage/music_album.json'
 
-        return unless File.exist?(path)
+    return unless File.exist?(path)
 
-        albums.map do |album|
-            arr << {published_date: album.published_date, on_spotify: album.on_spotify}
-        end
-
-        File.write(path, JSON.pretty_generate(arr))
+    albums.map do |album|
+      arr << { published_date: album.published_date, on_spotify: album.on_spotify }
     end
 
-    def fetch_albums
-        data = []
-        path = '../storage/music_album.json'
+    File.write(path, JSON.pretty_generate(arr))
+  end
 
-        return data if File.zero?(path)
+  def fetch_albums
+    data = []
+    path = '../storage/music_album.json'
 
-        JSON.parse(File.read(path)).each do |album|
-            data << Music.new(album['published_date'], album['on_spotify'])
-        end
+    return data if File.zero?(path)
 
-        data
+    JSON.parse(File.read(path)).each do |album|
+      data << Music.new(album['published_date'], album['on_spotify'])
     end
+
+    data
+  end
 end
