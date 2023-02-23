@@ -1,1 +1,7 @@
-[{"date":"eeee","publisher":"grae","cover_state":"good"},{"date":"eee","publisher":"ee","cover_state":"eee"},{"date":"eee","publisher":"eeee","cover_state":"eeee"},{"date":"e","publisher":"e","cover_state":"e"},{"date":"20/04/2023","publisher":"Dea","cover_state":"good"},{"date":"","publisher":"","cover_state":""}]
+[
+  {
+    "published_date": "12/12/2012",
+    "publisher": "hog",
+    "cover_state": "bad"
+  }
+]

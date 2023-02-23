@@ -1,29 +1,29 @@
 require 'json'
 
-module GameHandler
-  def save_game(games)
-    arr = []
-    path = '../storage/game.json'
+module Game_Handler
+    def save_games(games)
+        arr = []
+        path = '../storage/game.json'
 
-    return unless File.exist?(path)
+        return unless File.exist?(path)
 
-    games.map do |e|
-      arr << { publish_date: e.published_date, multiplayer: e.multiplayer, last_played_at: e.last_played_at }
+        games.map do |game|
+            arr << {published_date: game.published_date, multiplayer: game.multiplayer, last_played_at: game.last_played_at}
+        end
+
+        File.write(path, JSON.pretty_generate(arr))
     end
 
-    File.write(path, JSON.generate(arr))
-  end
+    def fetch_games
+        data = []
+        path = '../storage/game.json'
 
-  def fetch_game
-    path = '../storage/game.json'
+        return data if File.zero?(path)
 
-    return [] unless File.exist?(path)
+        JSON.parse(File.read(path)).each do |game|
+            data << Game.new(game['published_date'], game['multiplayer'], game['last_played_at'])
+        end
 
-    json_data = File.read(path)
-    parsed_data = JSON.parse(json_data)
-
-    parsed_data.map do |e|
-      Game.new(e['publish_date'], e['multiplayer'], e['last_played_at'])
+        data
     end
-  end
 end

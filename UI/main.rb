@@ -8,26 +8,21 @@ require_relative './split'
 require_relative '../handlers/book_handler'
 require_relative '../handlers/music_album_handler'
 require_relative '../handlers/game_handler'
-require_relative '../handlers/author_handler'
-require_relative '../handlers/label_handler'
-require_relative '../handlers/genre_handler'
 
 class Main
   include Split
-  include BookHandler
-  include MusicAlbumHandler
-  include GameHandler
-  include AuthorHandler
-  include LabelHandler
-  include GenreHandler
+  include Book_Handler
+  include Music_Handler
+  include Game_Handler
+
   def initialize
     super
     @books = fetch_books
-    @music_albums = fetch_music_album
-    @games = fetch_game
-    @genres = fetch_genre
-    @labels = fetch_label
-    @authors = fetch_author
+    @music_albums = fetch_albums
+    @games = fetch_games
+    @genres = []
+    @labels = []
+    @authors = []
   end
 
   COLOR_CODES = {
@@ -83,37 +78,29 @@ class Main
   end
 
   def run
+    puts 'Choose an Option'
     loop do
-      display_menu
+      puts '
+        1- List all books
+        2- List all music albums
+        3- List of games
+        4- List all genres
+        5- List all labels
+        6- List all authors
+        7- Add a book
+        8- Add a music album
+        9- Add a game
+        10- Quit '
+
       input = user_input('Choose an option: ').to_i
+
       break if input == 10
 
       operation(input)
     end
-    save_data
-  end
-
-  def display_menu
-    puts 'Choose an Option'
-    puts '1- List all books'
-    puts '2- List all music albums'
-    puts '3- List of games'
-    puts '4- List all genres'
-    puts '5- List all labels'
-    puts '6- List all authors'
-    puts '7- Add a book'
-    puts '8- Add a music album'
-    puts '9- Add a game'
-    puts '10- Quit'
-  end
-
-  def save_data
     save_books(@books)
-    save_music_album(@music_albums)
-    save_game(@games)
-    save_author(@authors)
-    save_label(@labels)
-    save_genre(@genres)
+    save_albums(@music_albums)
+    save_games(@games)
   end
 
   private

@@ -1,29 +1,29 @@
 require 'json'
 
-module BookHandler
-  def save_books(books)
-    arr = []
-    path = '../storage/book.json'
+module Book_Handler
+    def save_books(books)
+        arr = []
+        path = '../storage/book.json'
 
-    return unless File.exist?(path)
+        return unless File.exist?(path)
 
-    books.map do |book|
-      arr << { date: book.published_date, publisher: book.publisher, cover_state: book.cover_state }
+        books.map do |book|
+            arr << {published_date: book.published_date, publisher: book.publisher, cover_state: book.cover_state}
+        end
+
+        File.write(path, JSON.pretty_generate(arr))
     end
 
-    File.write(path, JSON.generate(arr))
-  end
+    def fetch_books
+        data = []
+        path = '../storage/book.json'
 
-  def fetch_books
-    path = '../storage/book.json'
+        return data if File.zero?(path)
 
-    return [] unless File.exist?(path)
+        JSON.parse(File.read(path)).each do |book|
+            data << Book.new(book['published_date'], book['publisher'], book['cover_state'])
+        end
 
-    json_data = File.read(path)
-    parsed_data = JSON.parse(json_data)
-
-    parsed_data.map do |book|
-      Book.new(book['date'], book['publisher'], book['cover_state'])
+        data
     end
-  end
 end
